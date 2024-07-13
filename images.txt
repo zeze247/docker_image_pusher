@@ -1,2 +1,2 @@
 alpine
-docker pull homeassistant/home-assistant:2024.7
+homeassistant/home-assistant:2024.7.2
