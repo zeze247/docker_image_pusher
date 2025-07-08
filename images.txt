@@ -1,1 +1,1 @@
-lmk123/migpt-server:latest
+lmk123/migpt-server
