@@ -1,2 +1,2 @@
-lmk123/migpt-server
+docker pull homeassistant/home-assistant:sha256-9d7a8d43743aa4dbc1b428f234ac30601342f1b0b310bd0bfda18bc955bfdbc0.sig
 
