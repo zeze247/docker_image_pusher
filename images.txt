@@ -1,1 +1,1 @@
-docker pull homeassistant/home-assistant:latest
+docker pull homeassistant/home-assistant
