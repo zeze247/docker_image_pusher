@@ -1,1 +1,1 @@
-homeassistant/home-assistant:latest
+koenkk/zigbee2mqtt:latest
