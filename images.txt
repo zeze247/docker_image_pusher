@@ -1,1 +1,1 @@
-koenkk/zigbee2mqtt:latest
+bastilimbach/docker-magicmirror:latest
