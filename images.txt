@@ -1,1 +1,1 @@
-docker pull olbat/cupsd:stable-2026-01-12
+olbat/cupsd:stable-2026-01-12
