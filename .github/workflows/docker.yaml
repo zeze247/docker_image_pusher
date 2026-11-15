@@ -14,7 +14,8 @@ env:
 jobs:
   build:
     name: Pull
-    runs-on: ubuntu-latest
+    # 核心改动 1：固定 runner 版本，绕过 ubuntu-latest 迁移期的不稳定
+    runs-on: ubuntu-24.04
     steps:
     - name: Before freeing up disk space
       run: |
@@ -22,7 +23,6 @@ jobs:
         df -hT
         echo "=============================================================================="
 
-    # 核心改动：替换为 jlumbroso/free-disk-space
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@main
       with:
@@ -30,9 +30,9 @@ jobs:
         android: true
         dotnet: true
         haskell: true
-        large-packages: false   # 设为 false 以加快速度，通常不需要清理此项
+        large-packages: false
         docker-images: true
-        swap-storage: false     # 设为 false 以加快速度
+        swap-storage: false
 
     - name: Free up disk space complete
       run: |
@@ -40,8 +40,9 @@ jobs:
         df -hT
         echo "=============================================================================="
 
+    # 核心改动 2：升级 checkout 到 v6，消除 Node.js 20 弃用警告
     - name: Checkout Code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Login to Docker Hub (optional)
       run: |
