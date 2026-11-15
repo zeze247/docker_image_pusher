@@ -1,9 +1,9 @@
 name: Sync Home Assistant to Aliyun ACR
 
 on:
-  workflow_dispatch: # 支持手动触发
+  workflow_dispatch: # 支持手动点击运行
   schedule:
-    - cron: '0 2 * * *' # 可选：每天定时自动同步一次
+    - cron: '0 2 * * *' # 每天定时同步
 
 jobs:
   build-and-push:
@@ -22,19 +22,26 @@ jobs:
           username: ${{ secrets.ALIYUN_REGISTRY_USER }}
           password: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
 
-      - name: Pull Home Assistant from GHCR (Bypass Docker Hub limits)
+      - name: Pull Home Assistant from GHCR
         run: |
-          echo "Pulling Home Assistant from GitHub Container Registry..."
+          echo "==> 正在从 GHCR 拉取 Home Assistant 镜像..."
           docker pull ghcr.io/home-assistant/home-assistant:latest
 
       - name: Tag and Push to Aliyun ACR
         run: |
-          # 组装阿里云目标镜像地址
-          TARGET_IMAGE="${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/home-assistant:latest"
+          RAW_REGISTRY="${{ secrets.ALIYUN_REGISTRY }}"
+          NAMESPACE="${{ secrets.ALIYUN_NAMESPACE }}"
           
-          echo "Tagging image for Aliyun..."
+          # 自动过滤掉可能误填的 https:// 前缀，防止路径解析错误
+          CLEAN_REGISTRY=$(echo "$RAW_REGISTRY" | sed 's|https://||g' | sed 's|http://||g')
+          
+          TARGET_IMAGE="$CLEAN_REGISTRY/$NAMESPACE/home-assistant:latest"
+          
+          echo "==> 目标推送地址: $TARGET_IMAGE"
+          
+          echo "==> 正在给镜像打 Tag..."
           docker tag ghcr.io/home-assistant/home-assistant:latest $TARGET_IMAGE
           
-          echo "Pushing image to Aliyun ACR..."
+          echo "==> 正在推送到阿里云 ACR..."
           docker push $TARGET_IMAGE
-          echo "Push completed successfully!"
+          echo "==> 推送全部完成！"
